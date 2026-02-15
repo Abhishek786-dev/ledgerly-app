@@ -52,7 +52,7 @@ export function SignUpView() {
     try {
       await axiosInstance.post('accounts/register/', { 
         username, 
-        email, 
+        email: email.toLowerCase(), 
         password 
       });
       router.push('/sign-in');

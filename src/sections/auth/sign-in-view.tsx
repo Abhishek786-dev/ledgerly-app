@@ -69,7 +69,7 @@ export function SignInView() {
         name="email"
         label="Email address"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value.toLowerCase())}
         sx={{ mb: 3 }}
         slotProps={{
           inputLabel: { shrink: true },
