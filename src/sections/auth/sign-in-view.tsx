@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useGoogleLogin } from '@react-oauth/google';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -50,6 +51,39 @@ export function SignInView() {
       setIsLoading(false);
     }
   }, [router, email, password]);
+
+  const handleGoogleLoginSuccess = async (tokenResponse: any) => {
+    try {
+      setIsLoading(true);
+      // Send the access token to Django backend
+      const response = await axiosInstance.post('accounts/auth/google/', {
+        access_token: tokenResponse.access_token,
+      });
+
+      const { data } = response;
+
+      localStorage.setItem('accessToken', data.access || data.key);
+      localStorage.setItem('refreshToken', data.refresh || '');
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
+      
+      router.push('/');
+    } catch (error: any) {
+      console.log(error.response?.data);
+      // console.error('Google Login Error:', error);
+      alert(error.response?.data?.detail || 'Google login failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loginWithGoogle = useGoogleLogin({
+    flow: 'implicit',
+    onSuccess: handleGoogleLoginSuccess,
+    onError: () => alert('Google Login Failed'),
+    // flow: 'auth-code',
+  });
 
   const renderForm = (
     <Box
@@ -155,7 +189,7 @@ export function SignInView() {
           justifyContent: 'center',
         }}
       >
-        <IconButton color="inherit">
+        <IconButton color="inherit" onClick={() => loginWithGoogle()}>
           <Iconify width={22} icon="socials:google" />
         </IconButton>
         {/* <IconButton color="inherit">

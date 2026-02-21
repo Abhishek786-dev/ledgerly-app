@@ -1,35 +1,24 @@
-
 import { useCallback } from 'react';
+import { googleLogout } from '@react-oauth/google';
 
 import { useRouter } from 'src/routes/hooks';
 
-import axiosInstance from 'src/utils/axios';
-
 // ----------------------------------------------------------------------
-
-interface LogoutPayload {
-  refresh: string;
-}
 
 export function useLogout() {
   const router = useRouter();
-  
-  const handleLogout = useCallback(async () => {
-  
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) return;
-    const payload: LogoutPayload = {
-      refresh: refreshToken,
-    };
+
+  const handleLogout = useCallback(() => {
     try {
-      await axiosInstance.post('accounts/logout/', payload);
-    } catch (error) {
-      console.error(error);
-    } finally {
+      googleLogout();
+      
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
+
       router.replace('/sign-in');
+    } catch (error) {
+      console.error('Logout error:', error);
     }
   }, [router]);
 
