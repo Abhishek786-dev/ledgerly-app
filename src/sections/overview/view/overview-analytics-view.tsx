@@ -1,6 +1,9 @@
+import dayjs from 'dayjs';
 import { useState, useEffect, useCallback } from 'react';
 
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { useAuth } from 'src/routes/hooks/use-auth';
@@ -55,6 +58,7 @@ type CategoryOptionProps = {
 
 export function OverviewAnalyticsView() {
   const { user, isAuthenticated } = useAuth();
+  const [selectedMonth, setSelectedMonth] = useState(dayjs().format('YYYY-MM'));
   const [weeklyExpenses, setWeeklyExpenses] = useState<WeeklyExpenseProps[]>([]);
   const [dailyExpenses, setDailyExpenses] = useState<DailyExpenseProps[]>([]);
   const [monthlyExpenses, setMonthlyExpenses] = useState<MonthlyExpenseProps[]>([]);
@@ -68,6 +72,7 @@ export function OverviewAnalyticsView() {
           const accessToken = localStorage.getItem('accessToken');
           const config = {
             headers: { Authorization: `Bearer ${accessToken}` },
+            params: { start_date: selectedMonth },
           };
 
           const [dailyExpensesRes, weeklyExpensesRes, monthlyExpensesRes, categoriesExpensesRes, paymentMethodsExpensesRes ] =
@@ -96,13 +101,25 @@ export function OverviewAnalyticsView() {
       }
     };
     fetchDropdownData();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, selectedMonth]);
   
   return (
     <DashboardContent maxWidth="xl">
-      <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
-        Hi {user?.username}!, Welcome back 👋
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: { xs: 3, md: 5 } }}>
+        <Typography variant="h4">
+          Hi {user?.username}!, Welcome back 👋
+        </Typography>
+        <TextField
+          label="Filter by Month"
+          type="month"
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          sx={{ minWidth: 200 }}
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+        />
+      </Box>
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>

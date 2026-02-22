@@ -23,7 +23,7 @@ export function SignInView() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,7 +35,7 @@ export function SignInView() {
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
 
-      const response = await axiosInstance.post('accounts/login/', { email, password });
+      const response = await axiosInstance.post('accounts/login/', { username, password });
       const { data } = response;
       
       localStorage.setItem('accessToken', data.token || data.access || 'mock-token');
@@ -50,7 +50,7 @@ export function SignInView() {
     } finally {
       setIsLoading(false);
     }
-  }, [router, email, password]);
+  }, [router, username, password]);
 
   const handleGoogleLoginSuccess = async (tokenResponse: any) => {
     try {
@@ -100,10 +100,10 @@ export function SignInView() {
     >
       <TextField
         fullWidth
-        name="email"
-        label="Email address"
-        value={email}
-        onChange={(e) => setEmail(e.target.value.toLowerCase())}
+        name="username"
+        label="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
         sx={{ mb: 3 }}
         slotProps={{
           inputLabel: { shrink: true },
