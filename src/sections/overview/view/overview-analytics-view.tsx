@@ -158,7 +158,7 @@ export function OverviewAnalyticsView() {
             icon={<img alt="Purchase orders" src="/assets/icons/glass/ic-glass-buy.svg" />}
             chart={{
               categories: monthlyExpenses.flatMap((item) => item.month),
-              series: monthlyExpenses.flatMap((item) => item.total),
+              series: monthlyExpenses.flatMap((item) => item.sub_total),
             }}
           />
         </Grid>

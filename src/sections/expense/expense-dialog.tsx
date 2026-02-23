@@ -62,7 +62,7 @@ export function ExpenseDialog({ open, onClose, onUpdate, currentExpense }: Expen
   const getInitialFormData = useCallback((expense?: ExpenseProps) => ({
     account_id: expense?.account?.account_id || '',
     category_id: expense?.category?.category_id || '',
-    vendor_id: expense?.vendor?.vendor_id || '',
+    vendor_id: expense?.vendor?.vendor_id,
     payment_method_id: expense?.payment_method?.payment_method_id || '',
     total_amount: expense?.total_amount?.toString() || '',
     expense_date: expense?.expense_date || new Date().toISOString().split('T')[0],
@@ -234,7 +234,6 @@ export function ExpenseDialog({ open, onClose, onUpdate, currentExpense }: Expen
             value={formData.vendor_id}
             onChange={handleChange}
             fullWidth
-            required
           >
             {vendors.map((option) => (
               <MenuItem key={option.vendor_id} value={option.vendor_id}>
