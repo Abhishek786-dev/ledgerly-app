@@ -86,7 +86,7 @@ export function LanguagePopover({ data = [], sx, ...other }: LanguagePopoverProp
 
   return (
     <>
-      <IconButton
+      {/* <IconButton
         aria-label="Languages button"
         onClick={onOpen}
         sx={[
@@ -101,7 +101,7 @@ export function LanguagePopover({ data = [], sx, ...other }: LanguagePopoverProp
         {...other}
       >
         {renderFlag(currentLang?.label, currentLang?.icon)}
-      </IconButton>
+      </IconButton> */}
 
       {renderMenuList()}
     </>

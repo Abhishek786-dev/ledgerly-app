@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
+import { useAuth } from 'src/routes/hooks/use-auth';
 import { useRouter, usePathname } from 'src/routes/hooks';
 import { LogoutButton } from 'src/routes/components/logout-button';
 
@@ -32,6 +33,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
   const router = useRouter();
 
   const pathname = usePathname();
+  const { user, isAuthenticated } = useAuth();
 
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
@@ -65,7 +67,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
         }}
         {...other}
       >
-        <Avatar src={_myAccount.photoURL} alt={_myAccount.displayName} sx={{ width: 1, height: 1 }}>
+        <Avatar src={_myAccount.photoURL} alt={user?.username} sx={{ width: 1, height: 1 }}>
           {_myAccount.displayName.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
@@ -84,11 +86,11 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
       >
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {_myAccount?.displayName}
+            {user?.username}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {_myAccount?.email}
+            {user?.email}
           </Typography>
         </Box>
 
